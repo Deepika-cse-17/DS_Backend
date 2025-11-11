@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  student-report-card-app:
+    build: .
+    container_name: student-report-card-system
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mount the code for development (optional - remove for production)
+      - .:/app
+    environment:
+      - FLASK_ENV=development
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/statistics')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
